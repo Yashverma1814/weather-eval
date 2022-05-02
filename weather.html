@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather Searching</title>
+</head>
+<style>
+    img{
+        width: 4rem;
+        height: 4rem;
+    }
+    #card{
+        display: grid;
+        grid-template-columns: repeat(2,50%);
+        grid-gap: 3%;
+    }
+    #con{
+        width: 50%;
+        border: 0.1px solid gray;
+        padding: 2%;
+    }
+    h3{
+        border-bottom: 1px solid gray;
+    }
+</style>
+<body>
+    <center>
+    <input type="text" id="city" placeholder="Enter City">
+    <button id="btn" onclick="getData()">Search</button>
+    <div id="con"></div>
+    </center>
+</body>
+<script>
+    var d1 = document.getElementById("con")
+    async function getData(){
+        d1.textContent = "";
+        var city = document.getElementById("city").value;
+        var api_key = "3b6724281d450616a446e06ff2e67a04";
+        var res = await fetch("https://api.openweathermap.org/data/2.5/weather?q="+city+"&appid="+api_key+"&units=metric");
+        let data = await res.json();
+        console.log(data);
+        display(data);
+    }
+    function display(data){
+        var div1 = document.createElement("div");
+        var h = document.createElement("h4");
+        h.textContent = "CURRENT WEATHER"
+        var img = document.createElement("img");
+        if(data.weather[0].description=="clear"){
+            img.src = "https://cdn.pixabay.com/photo/2012/04/10/16/49/sun-26344_960_720.png"
+        }
+        else{
+            img.src = "http://res.freestockphotos.biz/pictures/15/15146-illustration-of-a-stormy-cloud-pv.png"
+        }
+        var div2 = document.createElement("div");
+        var div3 = document.createElement("div");
+        var l1 = document.createElement("h3");
+        l1.textContent = "Clouds: "+ data.clouds.all +"%";
+        var l2 = document.createElement("h3");
+        l2.textContent = "MIN: "+data.main.temp_min;
+        var l3 = document.createElement("h3");
+        l3.textContent = "MAX: "+data.main.temp_max;
+        var l4 = document.createElement("h3");
+        l4.textContent = "Wind Speed: "+data.wind.speed +" KMPH";
+        var l5 = document.createElement("h3");
+        l5.textContent = "Pressure: "+data.main.pressure; 
+        var l6 = document.createElement("h3");
+        l6.textContent = "Humidity: "+data.main.humidity;
+        div1.setAttribute("id","card");
+        div2.setAttribute("id","ele1"); 
+        div3.setAttribute("id","ele2");
+        div2.append(l1,l2,l3);
+        div3.append(l4,l5,l6);
+        div1.append(div2,div3);
+        d1.append(h,img,div1);
+    }
+</script>
+</html>
